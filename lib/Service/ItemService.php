@@ -17,7 +17,6 @@ use OCP\IConfig;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCA\News\Db\ItemMapper;
-use OCA\News\Db\StatusFlag;
 use OCA\News\Db\FeedType;
 use OCA\News\Config\Config;
 use OCA\News\Utility\Time;
@@ -32,12 +31,10 @@ class ItemService extends Service {
     private $systemConfig;
 
     public function __construct(ItemMapper $itemMapper,
-                                StatusFlag $statusFlag,
                                 Time $timeFactory,
                                 Config $config,
                                 IConfig $systemConfig){
         parent::__construct($itemMapper);
-        $this->statusFlag = $statusFlag;
         $this->config = $config;
         $this->timeFactory = $timeFactory;
         $this->itemMapper = $itemMapper;

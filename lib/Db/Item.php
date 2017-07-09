@@ -63,6 +63,8 @@ class Item extends Entity implements IAPI, \JsonSerializable {
     protected $enclosureLink;
     protected $feedId;
     protected $status = 0;
+    protected $statusUnread = false;
+    protected $statusStarred = false;
     protected $lastModified;
     protected $searchIndex;
     protected $rtl;
@@ -73,43 +75,45 @@ class Item extends Entity implements IAPI, \JsonSerializable {
         $this->addType('updatedDate', 'integer');
         $this->addType('feedId', 'integer');
         $this->addType('status', 'integer');
+        $this->addType('statusUnread', 'boolean');
+        $this->addType('statusStarred', 'boolean');
         $this->addType('rtl', 'boolean');
     }
 
     public function setRead() {
-        $this->markFieldUpdated('status');
-        $this->status &= ~StatusFlag::UNREAD;
+        $this->markFieldUpdated('statusUnread');
+        $this->statusUnread = false;
     }
 
     public function isRead() {
-        return !(($this->status & StatusFlag::UNREAD) === StatusFlag::UNREAD);
+        return !$this->statusUnread;
     }
 
     public function setUnread() {
-        $this->markFieldUpdated('status');
-        $this->status |= StatusFlag::UNREAD;
+        $this->markFieldUpdated('statusUnread');
+        $this->statusUnread = false;
     }
 
     public function isUnread() {
-        return !$this->isRead();
+        return $this->statusUnread;
     }
 
     public function setStarred() {
-        $this->markFieldUpdated('status');
-        $this->status |= StatusFlag::STARRED;
+        $this->markFieldUpdated('statusStarred');
+        $this->statusStarred = true;
     }
 
     public function isStarred() {
-        return ($this->status & StatusFlag::STARRED) === StatusFlag::STARRED;
+        return $this->statusStarred;
     }
 
     public function setUnstarred() {
         $this->markFieldUpdated('status');
-        $this->status &= ~StatusFlag::STARRED;
+        $this->statusStarred = false;
     }
 
     public function isUnstarred() {
-        return !$this->isStarred();
+        return !$this->statusStarred;
     }
 
     /**
